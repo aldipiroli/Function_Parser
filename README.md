@@ -1,7 +1,7 @@
 # Language-Processing
 
 ## Function Parser
-A program that parses, defines and calls a function. 
+A program that parses, defines and calls a function that can do sums and multiplications. 
 
 ### Example:
 ```
