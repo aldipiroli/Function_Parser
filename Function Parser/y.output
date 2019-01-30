@@ -1,0 +1,294 @@
+Grammar
+
+    0 $accept: commands $end
+
+    1 commands: %empty
+    2         | commands command
+
+    3 command: function_definition
+    4        | function_call
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK operations SEMICOLON_TOK CLOSE_BRACES_TOK
+
+    6 list_of_parameters: ID_PARAMETER
+    7                   | list_of_parameters COMMA_TOK ID_PARAMETER
+
+    8 operations: ID_PARAMETER
+    9           | operations PLUS_TOK ID_PARAMETER
+   10           | operations MULT_TOK ID_PARAMETER
+
+   11 function_call: ID_FUNCTION list_of_numbers CLOSE_PAR_TOK SEMICOLON_TOK
+
+   12 list_of_numbers: NUMBER
+   13                | list_of_numbers COMMA_TOK NUMBER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+RETURN_TOK (258) 5
+FUNCTION_TOK (259) 5
+COMMA_TOK (260) 7 13
+CLOSE_PAR_TOK (261) 5 11
+OPEN_BRACES_TOK (262) 5
+CLOSE_BRACES_TOK (263) 5
+SEMICOLON_TOK (264) 5 11
+ID_FUNCTION (265) 5 11
+ID_PARAMETER (266) 6 7 8 9 10
+PLUS_TOK (267) 9
+MULT_TOK (268) 10
+NUMBER (269) 12 13
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+commands (16)
+    on left: 1 2, on right: 0 2
+command (17)
+    on left: 3 4, on right: 2
+function_definition (18)
+    on left: 5, on right: 3
+list_of_parameters (19)
+    on left: 6 7, on right: 5 7
+operations (20)
+    on left: 8 9 10, on right: 5 9 10
+function_call (21)
+    on left: 11, on right: 4
+list_of_numbers (22)
+    on left: 12 13, on right: 11 13
+
+
+State 0
+
+    0 $accept: . commands $end
+
+    $default  reduce using rule 1 (commands)
+
+    commands  go to state 1
+
+
+State 1
+
+    0 $accept: commands . $end
+    2 commands: commands . command
+
+    $end          shift, and go to state 2
+    FUNCTION_TOK  shift, and go to state 3
+    ID_FUNCTION   shift, and go to state 4
+
+    command              go to state 5
+    function_definition  go to state 6
+    function_call        go to state 7
+
+
+State 2
+
+    0 $accept: commands $end .
+
+    $default  accept
+
+
+State 3
+
+    5 function_definition: FUNCTION_TOK . ID_FUNCTION list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK operations SEMICOLON_TOK CLOSE_BRACES_TOK
+
+    ID_FUNCTION  shift, and go to state 8
+
+
+State 4
+
+   11 function_call: ID_FUNCTION . list_of_numbers CLOSE_PAR_TOK SEMICOLON_TOK
+
+    NUMBER  shift, and go to state 9
+
+    list_of_numbers  go to state 10
+
+
+State 5
+
+    2 commands: commands command .
+
+    $default  reduce using rule 2 (commands)
+
+
+State 6
+
+    3 command: function_definition .
+
+    $default  reduce using rule 3 (command)
+
+
+State 7
+
+    4 command: function_call .
+
+    $default  reduce using rule 4 (command)
+
+
+State 8
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION . list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK operations SEMICOLON_TOK CLOSE_BRACES_TOK
+
+    ID_PARAMETER  shift, and go to state 11
+
+    list_of_parameters  go to state 12
+
+
+State 9
+
+   12 list_of_numbers: NUMBER .
+
+    $default  reduce using rule 12 (list_of_numbers)
+
+
+State 10
+
+   11 function_call: ID_FUNCTION list_of_numbers . CLOSE_PAR_TOK SEMICOLON_TOK
+   13 list_of_numbers: list_of_numbers . COMMA_TOK NUMBER
+
+    COMMA_TOK      shift, and go to state 13
+    CLOSE_PAR_TOK  shift, and go to state 14
+
+
+State 11
+
+    6 list_of_parameters: ID_PARAMETER .
+
+    $default  reduce using rule 6 (list_of_parameters)
+
+
+State 12
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters . CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK operations SEMICOLON_TOK CLOSE_BRACES_TOK
+    7 list_of_parameters: list_of_parameters . COMMA_TOK ID_PARAMETER
+
+    COMMA_TOK      shift, and go to state 15
+    CLOSE_PAR_TOK  shift, and go to state 16
+
+
+State 13
+
+   13 list_of_numbers: list_of_numbers COMMA_TOK . NUMBER
+
+    NUMBER  shift, and go to state 17
+
+
+State 14
+
+   11 function_call: ID_FUNCTION list_of_numbers CLOSE_PAR_TOK . SEMICOLON_TOK
+
+    SEMICOLON_TOK  shift, and go to state 18
+
+
+State 15
+
+    7 list_of_parameters: list_of_parameters COMMA_TOK . ID_PARAMETER
+
+    ID_PARAMETER  shift, and go to state 19
+
+
+State 16
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters CLOSE_PAR_TOK . OPEN_BRACES_TOK RETURN_TOK operations SEMICOLON_TOK CLOSE_BRACES_TOK
+
+    OPEN_BRACES_TOK  shift, and go to state 20
+
+
+State 17
+
+   13 list_of_numbers: list_of_numbers COMMA_TOK NUMBER .
+
+    $default  reduce using rule 13 (list_of_numbers)
+
+
+State 18
+
+   11 function_call: ID_FUNCTION list_of_numbers CLOSE_PAR_TOK SEMICOLON_TOK .
+
+    $default  reduce using rule 11 (function_call)
+
+
+State 19
+
+    7 list_of_parameters: list_of_parameters COMMA_TOK ID_PARAMETER .
+
+    $default  reduce using rule 7 (list_of_parameters)
+
+
+State 20
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK . RETURN_TOK operations SEMICOLON_TOK CLOSE_BRACES_TOK
+
+    RETURN_TOK  shift, and go to state 21
+
+
+State 21
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK . operations SEMICOLON_TOK CLOSE_BRACES_TOK
+
+    ID_PARAMETER  shift, and go to state 22
+
+    operations  go to state 23
+
+
+State 22
+
+    8 operations: ID_PARAMETER .
+
+    $default  reduce using rule 8 (operations)
+
+
+State 23
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK operations . SEMICOLON_TOK CLOSE_BRACES_TOK
+    9 operations: operations . PLUS_TOK ID_PARAMETER
+   10           | operations . MULT_TOK ID_PARAMETER
+
+    SEMICOLON_TOK  shift, and go to state 24
+    PLUS_TOK       shift, and go to state 25
+    MULT_TOK       shift, and go to state 26
+
+
+State 24
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK operations SEMICOLON_TOK . CLOSE_BRACES_TOK
+
+    CLOSE_BRACES_TOK  shift, and go to state 27
+
+
+State 25
+
+    9 operations: operations PLUS_TOK . ID_PARAMETER
+
+    ID_PARAMETER  shift, and go to state 28
+
+
+State 26
+
+   10 operations: operations MULT_TOK . ID_PARAMETER
+
+    ID_PARAMETER  shift, and go to state 29
+
+
+State 27
+
+    5 function_definition: FUNCTION_TOK ID_FUNCTION list_of_parameters CLOSE_PAR_TOK OPEN_BRACES_TOK RETURN_TOK operations SEMICOLON_TOK CLOSE_BRACES_TOK .
+
+    $default  reduce using rule 5 (function_definition)
+
+
+State 28
+
+    9 operations: operations PLUS_TOK ID_PARAMETER .
+
+    $default  reduce using rule 9 (operations)
+
+
+State 29
+
+   10 operations: operations MULT_TOK ID_PARAMETER .
+
+    $default  reduce using rule 10 (operations)
